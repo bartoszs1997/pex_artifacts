@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Portfolio artifacts for Senior Big Data Software Engineer promotion"
 requires-python = ">=3.10"
 dependencies = [
-    "pyspark>=3.5.0",
+    "pyspark==4.1.2",
     "pandas>=2.0.0",
     "kaggle>=1.6.0",
 ]
