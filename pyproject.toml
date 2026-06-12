@@ -1,0 +1,38 @@
+[project]
+name = "pex-artifacts"
+version = "0.1.0"
+description = "Portfolio artifacts for Senior Big Data Software Engineer promotion"
+requires-python = ">=3.10"
+dependencies = [
+    "pyspark>=3.5.0",
+    "pandas>=2.0.0",
+    "kaggle>=1.6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.1.0",
+    "mypy>=1.7.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W"]
+ignore = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false

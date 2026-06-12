@@ -84,6 +84,11 @@ temp/
 # data/
 # output/
 
+# Downloaded datasets (large files - fetch via download_data.py)
+**/data/tvs.csv
+**/data/tvs.json
+**/data/*.parquet
+
 # Spark specific
 metastore_db/
 derby.log
