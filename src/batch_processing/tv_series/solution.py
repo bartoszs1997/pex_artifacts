@@ -44,6 +44,13 @@ def build_spark(jdbc_jar: str | None = None) -> SparkSession:
     When None, the job stays JSON-only and simple.
     """
     builder = SparkSession.builder.appName("tv-series-batch").master("local[*]")
+    # Force loopback networking. On macOS Spark may resolve the host to a LAN
+    # IP (e.g. 192.168.x.x) and then fail to fetch its own shuffle/result
+    # blocks ("Failed to connect", "Broken pipe", TaskResultLost), which can
+    # abort the job non-deterministically. Pinning the driver to 127.0.0.1
+    # keeps all block transfers on the loopback device and makes runs stable.
+    builder = builder.config("spark.driver.host", "127.0.0.1")
+    builder = builder.config("spark.driver.bindAddress", "127.0.0.1")
 
     if jdbc_jar:
         builder = builder.config("spark.jars", jdbc_jar)
@@ -128,20 +135,19 @@ def main() -> None:
         series.printSchema()
 
         canceled_creators = q1_canceled_creators(series)
-        popular_countries = q2_popular_origin_countries(series)
-        short_series = q3_short_series(series)
-
         log.info("== Q1: creators of Canceled series ==")
         canceled_creators.show(truncate=False)
+        write_to_parquet(canceled_creators, str(OUTPUT_DIR / "canceled_creators"))
 
+        popular_countries = q2_popular_origin_countries(series)
         log.info("== Q2: origin countries with popularity > 5.0 ==")
         popular_countries.show(truncate=False)
+        write_to_parquet(popular_countries, str(OUTPUT_DIR / "popular_countries"))
 
+        short_series = q3_short_series(series)
         log.info("== Q3: series with fewer than 100 episodes ==")
         short_series.show(truncate=False)
-
-        write_to_parquet(canceled_creators, str(OUTPUT_DIR / "canceled_creators"))
-        write_to_parquet(popular_countries, str(OUTPUT_DIR / "popular_countries"))
+        write_to_parquet(short_series, str(OUTPUT_DIR / "short_series"))
 
         if args.pause:
             log.info("Spark UI is live at http://localhost:4040")
