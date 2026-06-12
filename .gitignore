@@ -89,6 +89,10 @@ temp/
 **/data/tvs.json
 **/data/*.parquet
 
+# Spark input/output data (generated, not source)
+**/data/input/
+**/data/output/
+
 # Spark specific
 metastore_db/
 derby.log
