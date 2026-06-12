@@ -1,0 +1,106 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments (UV, venv, virtualenv, conda)
+.venv/
+venv/
+ENV/
+env/
+.conda/
+.python-version
+
+# UV specific
+.uv/
+uv.lock
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb_checkpoints/
+notebook_*.html
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Credentials & secrets
+*.env
+.env
+.env.*
+!.env.example
+credentials.json
+secrets/
+*.pem
+*.key
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Data files (uncomment if storing data locally)
+# *.csv
+# *.parquet
+# *.json
+# *.avro
+# data/
+# output/
+
+# Spark specific
+metastore_db/
+derby.log
+spark-warehouse/
+.spark-warehouse/
+checkpoint/
+
+# pytest
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# ruff
+.ruff_cache/
