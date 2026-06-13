@@ -8,6 +8,7 @@ dependencies = [
     "pandas>=2.2.2",
     "kaggle>=1.6.0",
     "mysql-connector-python>=9.0.0",
+    "python-dotenv>=1.0.0",
 ]
 
 [project.optional-dependencies]
