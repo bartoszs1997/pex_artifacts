@@ -112,3 +112,7 @@ dmypy.json
 
 # ruff
 .ruff_cache/
+
+# Local-only validation helper (not part of the deliverable)
+**/pizza_orders/validation.py
+
