@@ -19,7 +19,7 @@ Output:
     gitignored (see .gitignore: **/data/input/), so the data never enters git.
 
 Usage:
-    uv run python src/batch_processing/english_words/download_data.py
+    uv run python src/batch_processing/03_english_words/download_data.py
 """
 
 import logging

@@ -15,7 +15,7 @@ README for how to start the cluster and submit the job.
 Run (Standalone cluster; Java 17 must be on PATH for PySpark 4.x):
     export PATH="/opt/homebrew/opt/openjdk@17/bin:$PATH"
     spark-submit --master spark://localhost:7077 \\
-        src/batch_processing/english_words/solution.py
+        src/batch_processing/03_english_words/solution.py
 """
 
 import logging

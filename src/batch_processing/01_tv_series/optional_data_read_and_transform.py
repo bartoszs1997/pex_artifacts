@@ -17,7 +17,7 @@ Credentials are read from a gitignored `.env` file at the repo root
 
 Run (from the repo root):
     export PATH="/opt/homebrew/opt/openjdk@17/bin:$PATH"   # Java 17 for PySpark 4.x
-    uv run python src/batch_processing/tv_series/optional_data_read_and_transform.py
+    uv run python src/batch_processing/01_tv_series/optional_data_read_and_transform.py
 """
 
 import os

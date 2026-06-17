@@ -3,8 +3,8 @@
 Run:
     # Java 17 must be on PATH (PySpark 4.x requirement):
     export PATH="/opt/homebrew/opt/openjdk@17/bin:$PATH"
-    uv run python src/batch_processing/tv_series/basic_solution.py
-    uv run python src/batch_processing/tv_series/basic_solution.py --pause
+    uv run python src/batch_processing/01_tv_series/basic_solution.py
+    uv run python src/batch_processing/01_tv_series/basic_solution.py --pause
 """
 
 import argparse
