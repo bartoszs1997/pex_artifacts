@@ -15,7 +15,7 @@ Credentials are read from a gitignored `.env` file at the repo root
 (MYSQL_USER / MYSQL_PASSWORD); copy `.env.example` to `.env` and fill it in.
 
 Run (from the repo root, after the MySQL server is started):
-    uv run python src/batch_processing/tv_series/optional_data_load.py
+    uv run python src/batch_processing/01_tv_series/optional_data_load.py
 """
 
 import logging

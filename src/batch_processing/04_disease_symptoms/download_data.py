@@ -1,8 +1,8 @@
-"""Download the TV Series dataset from Kaggle.
+"""Download the Disease Symptoms and Patient Profile dataset from Kaggle.
 
 Dataset:
-    bourdier/all-tv-series-details-dataset
-    (referenced by the task as the "TV Series Dataset")
+    uom190346a/disease-symptoms-and-patient-profile-dataset
+    (referenced by the task as "Disease Symptoms and Patient Profile")
 
 Authentication:
     The Kaggle Python client reads credentials automatically from the
@@ -15,13 +15,17 @@ Authentication:
     committed to the repository. The client reads the token from disk
     when api.authenticate() is called.
 
+    (The task references kagglehub, but this repo already uses the official
+    `kaggle` client elsewhere; it downloads straight into ./data/input rather
+    than a global cache, keeping the gitignored layout consistent.)
+
 Output:
-    The dataset is downloaded and unzipped into ./data/ next to this
-    script. That folder is gitignored (see .gitignore: **/data/tvs.*),
-    so the large files (tvs.json ~151 MB, tvs.csv ~87 MB) never enter git.
+    The dataset is downloaded and unzipped into ./data/input next to this
+    script. That folder is gitignored (see .gitignore: **/data/input/),
+    so the data files never enter git.
 
 Usage:
-    uv run python src/batch_processing/tv_series/download_data.py
+    uv run python src/batch_processing/04_disease_symptoms/download_data.py
 """
 
 import logging
@@ -30,13 +34,13 @@ from pathlib import Path
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 log = logging.getLogger("download")
 
-DATASET = "bourdier/all-tv-series-details-dataset"
+DATASET = "uom190346a/disease-symptoms-and-patient-profile-dataset"
 DATA_DIR = Path(__file__).resolve().parent / "data/input"
 
 
 def download() -> None:
     """Authenticate with Kaggle and download the dataset into DATA_DIR."""
-    DATA_DIR.mkdir(exist_ok=True)
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
 
     # Imported inside the function (not at module top) so this file can be
     # imported without Kaggle credentials being present, e.g. during tests.

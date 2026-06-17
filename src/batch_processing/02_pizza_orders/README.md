@@ -38,7 +38,7 @@ Join chain: `order_details → orders` (on `order_id`) `→ pizzas` (on `pizza_i
 ## Layout
 
 ```
-pizza_orders/
+02_pizza_orders/
 ├── download_data.py      # fetch the dataset from Kaggle -> data/input/
 ├── solution.py           # Spark app: read 4 CSVs, join, answer Q1-Q3, write Parquet
 ├── data/                 # gitignored
@@ -68,11 +68,11 @@ All commands are run from the repo root.
 uv sync
 
 # 1) download the dataset -> data/input/pizza_sales/
-uv run python src/batch_processing/pizza_orders/download_data.py
+uv run python src/batch_processing/02_pizza_orders/download_data.py
 
 # 2) run the Spark app — read CSVs, answer Q1-Q3, write Parquet to data/output/
 export PATH="/opt/homebrew/opt/openjdk@17/bin:$PATH"
-uv run python src/batch_processing/pizza_orders/solution.py
+uv run python src/batch_processing/02_pizza_orders/solution.py
 ```
 
 ## `solution.py`
@@ -117,7 +117,7 @@ stored correctly, read it back with an independent tool — the local-only
 Q1-Q3 straight from the saved file:
 
 ```bash
-uv run python src/batch_processing/pizza_orders/validation.py
+uv run python src/batch_processing/02_pizza_orders/validation.py
 ```
 
 It reports **48 620 rows** (= number of `order_details` records, so the inner

@@ -53,7 +53,7 @@ literals rather than booleans.
 ## Layout
 
 ```
-disease_symptoms/
+04_disease_symptoms/
 ├── download_data.py   # fetch the CSV from Kaggle -> data/input/
 ├── solution.py        # Spark app: load CSV, Q1/Q2/Q3, write Q3 summary to CSV
 ├── data/              # gitignored
@@ -81,11 +81,11 @@ All commands are run from the repo root.
 uv sync
 
 # 1) download the dataset -> data/input/
-uv run python src/batch_processing/disease_symptoms/download_data.py
+uv run python src/batch_processing/04_disease_symptoms/download_data.py
 
 # 2) run the Spark app — load CSV, answer Q1-Q3, write Q3 summary to data/output/
 export PATH="/opt/homebrew/opt/openjdk@17/bin:$PATH"
-uv run python src/batch_processing/disease_symptoms/solution.py
+uv run python src/batch_processing/04_disease_symptoms/solution.py
 ```
 
 ## `solution.py`

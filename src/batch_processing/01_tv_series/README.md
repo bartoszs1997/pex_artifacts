@@ -19,7 +19,7 @@ MySQL table over JDBC and aggregates the joined result.
 ## Layout
 
 ```
-tv_series/
+01_tv_series/
 ├── download_data.py                  # fetch the dataset from Kaggle -> data/input/
 ├── basic_solution.py                 # Phase 1: read JSON, 3 queries, show + write CSV
 ├── optional_data_load.py             # Phase 2 (load): run sql/setup_ratings.sql in MySQL
@@ -56,19 +56,19 @@ All commands are run from the repo root.
 uv sync
 
 # 1) download the dataset -> data/input/
-uv run python src/batch_processing/tv_series/download_data.py
+uv run python src/batch_processing/01_tv_series/download_data.py
 
 # 2) Phase 1 — read JSON, run 3 queries, write CSV to data/output/
 export PATH="/opt/homebrew/opt/openjdk@17/bin:$PATH"
-uv run python src/batch_processing/tv_series/basic_solution.py
+uv run python src/batch_processing/01_tv_series/basic_solution.py
 # add --pause to keep the Spark UI (http://localhost:4040) alive after the run
-uv run python src/batch_processing/tv_series/basic_solution.py --pause
+uv run python src/batch_processing/01_tv_series/basic_solution.py --pause
 
 # 3) Phase 2 (load) — create the pex DB + series_ratings table in MySQL
-uv run python src/batch_processing/tv_series/optional_data_load.py
+uv run python src/batch_processing/01_tv_series/optional_data_load.py
 
 # 4) Phase 2 (read) — JDBC read + join with JSON + aggregation
-uv run python src/batch_processing/tv_series/optional_data_read_and_transform.py
+uv run python src/batch_processing/01_tv_series/optional_data_read_and_transform.py
 ```
 
 ## Phase 1 — `basic_solution.py`

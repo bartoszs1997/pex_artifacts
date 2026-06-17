@@ -11,7 +11,7 @@ Results are logged and the joined dataset is written to Parquet.
 Run:
     # Java 17 must be on PATH (PySpark 4.x requirement):
     export PATH="/opt/homebrew/opt/openjdk@17/bin:$PATH"
-    uv run python src/batch_processing/pizza_orders/solution.py
+    uv run python src/batch_processing/02_pizza_orders/solution.py
 """
 
 import logging

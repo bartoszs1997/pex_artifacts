@@ -21,7 +21,7 @@ Output:
     so the data files never enter git.
 
 Usage:
-    uv run python src/batch_processing/pizza_orders/download_data.py
+    uv run python src/batch_processing/02_pizza_orders/download_data.py
 """
 
 import logging

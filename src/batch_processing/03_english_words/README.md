@@ -40,7 +40,7 @@ HTTPS from the raw GitHub URL; no Kaggle account or API token is needed.
 ## Layout
 
 ```
-english_words/
+03_english_words/
 ├── download_data.py   # fetch words.txt from GitHub (HTTPS) -> data/input/
 ├── solution.py        # Spark app: Q1/Q2 counts + Q3 transform -> CSV
 ├── data/              # gitignored
@@ -82,7 +82,7 @@ every component binds to loopback (avoids the macOS LAN-IP networking issues).
 ### 0) Download the dataset
 
 ```bash
-uv run python src/batch_processing/english_words/download_data.py
+uv run python src/batch_processing/03_english_words/download_data.py
 ```
 
 ### 1) Start the master
@@ -135,7 +135,7 @@ export PYSPARK_DRIVER_PYTHON="$(pwd)/.venv/bin/python"
 "$SPARK_HOME/bin/spark-submit" \
     --master spark://localhost:7077 \
     --name "WordsAnalysis" \
-    src/batch_processing/english_words/solution.py
+    src/batch_processing/03_english_words/solution.py
 ```
 
 Because the app does **not** hard-code `.master(...)`, the master comes entirely

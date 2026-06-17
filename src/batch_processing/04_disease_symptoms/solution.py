@@ -10,7 +10,7 @@ Each result is logged; the Q3 gender breakdown is also written to CSV.
 Run:
     # Java 17 must be on PATH (PySpark 4.x requirement):
     export PATH="/opt/homebrew/opt/openjdk@17/bin:$PATH"
-    uv run python src/batch_processing/disease_symptoms/solution.py
+    uv run python src/batch_processing/04_disease_symptoms/solution.py
 """
 
 import logging
