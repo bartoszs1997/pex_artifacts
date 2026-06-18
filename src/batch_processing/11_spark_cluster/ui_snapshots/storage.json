@@ -1,0 +1,97 @@
+[
+    {
+        "id": 21,
+        "name": "*(2) HashAggregate(keys=[department#1], functions=[count(1), avg(salary#2L), stddev_samp(cast(salary#2L as double))], output=[department#1, count#66L, avg_salary#68, std_salary#78])\n+- Exchange hashpartitioning(department#1, 8), ENSURE_REQUIREMENTS, [plan_id=105]\n   +- *(1) HashAggregate(keys=[department#1], functions=[partial_count(1), partial_avg(salary#2L), partial_stddev_samp(cast(salary#2L as double))], output=[department#1, count#118L, sum#119, count#120L, n#100, avg#101, m2#102])\n      +- *(1) Project [department#1, salary#2L]\n         +- *(1) Scan ExistingRDD[employee_id#0,department#1,salary#2L]\n",
+        "numPartitions": 8,
+        "numCachedPartitions": 8,
+        "storageLevel": "Disk Memory Deserialized 1x Replicated",
+        "memoryUsed": 2152,
+        "diskUsed": 0,
+        "dataDistribution": [
+            {
+                "address": "172.18.0.3:40271",
+                "memoryUsed": 2152,
+                "memoryRemaining": 455464677,
+                "diskUsed": 0,
+                "onHeapMemoryUsed": 2152,
+                "offHeapMemoryUsed": 0,
+                "onHeapMemoryRemaining": 455464677,
+                "offHeapMemoryRemaining": 0
+            }
+        ],
+        "partitions": [
+            {
+                "blockName": "rdd_21_0",
+                "storageLevel": "Memory Deserialized 1x Replicated",
+                "memoryUsed": 16,
+                "diskUsed": 0,
+                "executors": [
+                    "0"
+                ]
+            },
+            {
+                "blockName": "rdd_21_4",
+                "storageLevel": "Memory Deserialized 1x Replicated",
+                "memoryUsed": 664,
+                "diskUsed": 0,
+                "executors": [
+                    "0"
+                ]
+            },
+            {
+                "blockName": "rdd_21_1",
+                "storageLevel": "Memory Deserialized 1x Replicated",
+                "memoryUsed": 728,
+                "diskUsed": 0,
+                "executors": [
+                    "0"
+                ]
+            },
+            {
+                "blockName": "rdd_21_3",
+                "storageLevel": "Memory Deserialized 1x Replicated",
+                "memoryUsed": 16,
+                "diskUsed": 0,
+                "executors": [
+                    "0"
+                ]
+            },
+            {
+                "blockName": "rdd_21_2",
+                "storageLevel": "Memory Deserialized 1x Replicated",
+                "memoryUsed": 16,
+                "diskUsed": 0,
+                "executors": [
+                    "0"
+                ]
+            },
+            {
+                "blockName": "rdd_21_5",
+                "storageLevel": "Memory Deserialized 1x Replicated",
+                "memoryUsed": 16,
+                "diskUsed": 0,
+                "executors": [
+                    "0"
+                ]
+            },
+            {
+                "blockName": "rdd_21_6",
+                "storageLevel": "Memory Deserialized 1x Replicated",
+                "memoryUsed": 680,
+                "diskUsed": 0,
+                "executors": [
+                    "0"
+                ]
+            },
+            {
+                "blockName": "rdd_21_7",
+                "storageLevel": "Memory Deserialized 1x Replicated",
+                "memoryUsed": 16,
+                "diskUsed": 0,
+                "executors": [
+                    "0"
+                ]
+            }
+        ]
+    }
+]

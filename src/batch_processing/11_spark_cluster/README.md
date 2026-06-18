@@ -25,8 +25,8 @@ colima start
 ## Quick Start
 
 ```bash
-# 0. Go to the task directory
-cd src/batch_processing/
+# 0. Go to the task directory (from repo root)
+cd src/batch_processing/11_spark_cluster
 
 # 1. Start the cluster (master + worker)
 docker compose up -d
@@ -48,13 +48,21 @@ After 60 seconds the driver exits and Spark UI disappears. You can interrupt ear
 
 ```
 11_spark_cluster/
-├── docker-compose.yml    ← defines the cluster: 1 master + 1 worker
-├── spark_ui_debug.py     ← Spark job (5 jobs targeting different UI tabs)
-├── spark_submit.sh       ← script to submit the job (docker exec)
-├── data/output/          ← computation results (JSON, CSV, Parquet)
-│   ├── dept_stats/       ← per-department statistics (JSON)
-│   ├── sql_aggregation/  ← SQL query result (CSV)
-│   └── skew_analysis/    ← skew analysis (Parquet)
+├── docker-compose.yml      ← defines the cluster: 1 master + 1 worker
+├── spark_ui_debug.py       ← Spark job (5 jobs targeting different UI tabs)
+├── spark_submit.sh         ← script to submit the job (docker exec)
+├── data/output/            ← computation results (JSON, CSV, Parquet)
+│   ├── dept_stats/         ← per-department statistics (JSON)
+│   ├── sql_aggregation/    ← SQL query result (CSV)
+│   └── skew_analysis/      ← skew analysis (Parquet)
+├── logs/                   ← application logs (gitignored)
+│   └── spark_cluster.log   ← job execution log
+├── ui_snapshots/           ← Spark UI REST API captures
+│   ├── jobs.json           ← all jobs with status/duration
+│   ├── stages.json         ← stages breakdown per job
+│   ├── storage.json        ← cached DataFrames
+│   ├── executors.json      ← executor memory/task stats
+│   └── environment.json    ← Spark configuration (sparkProperties)
 └── README.md
 ```
 

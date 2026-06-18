@@ -12,6 +12,7 @@ services:
     volumes:
       - ./spark_ui_debug.py:/opt/spark_job/spark_ui_debug.py:ro
       - ./data/output:/opt/spark_job/output
+      - ./logs:/opt/spark_job/logs
       - spark-events:/tmp/spark-events
     environment:
       - SPARK_NO_DAEMONIZE=true
