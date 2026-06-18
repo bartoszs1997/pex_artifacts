@@ -1,0 +1,39 @@
+services:
+  spark-master:
+    image: apache/spark-py:latest
+    container_name: pex-spark-master
+    hostname: spark-master
+    user: root
+    command: /opt/spark/sbin/start-master.sh
+    ports:
+      - "7077:7077"
+      - "8080:8080"
+      - "4040:4040"
+    volumes:
+      - ./spark_ui_debug.py:/opt/spark_job/spark_ui_debug.py:ro
+      - ./data/output:/opt/spark_job/output
+      - spark-events:/tmp/spark-events
+    environment:
+      - SPARK_NO_DAEMONIZE=true
+      - SPARK_MASTER_OPTS=-Dspark.ui.port=8080
+
+  spark-worker:
+    image: apache/spark-py:latest
+    container_name: pex-spark-worker
+    hostname: spark-worker
+    user: root
+    command: /opt/spark/sbin/start-worker.sh spark://spark-master:7077
+    ports:
+      - "8081:8081"
+    depends_on:
+      - spark-master
+    volumes:
+      - ./data/output:/opt/spark_job/output
+      - spark-events:/tmp/spark-events
+    environment:
+      - SPARK_NO_DAEMONIZE=true
+      - SPARK_WORKER_CORES=2
+      - SPARK_WORKER_MEMORY=2g
+
+volumes:
+  spark-events:
