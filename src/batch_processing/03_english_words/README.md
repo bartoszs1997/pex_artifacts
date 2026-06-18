@@ -190,11 +190,11 @@ and re-raises on error, and always calls `spark.stop()`.
 
 | # | Criterion | Status |
 | --- | --- | --- |
-| 1 | Spark cluster in Standalone deploy mode | ✅ master + worker on `spark://localhost:7077` |
-| 2 | Spark application written | ✅ `solution.py` |
-| 3 | Packaged into a **JAR** | ⚠️ N/A for Python — see below |
-| 4 | Submitted via `spark-submit` | ✅ `spark-submit --master spark://localhost:7077` |
-| 5 | Expected output produced, job completed | ✅ 267 / 29 214 / 10 836, app `FINISHED` |
+| 1 | Spark cluster in Standalone deploy mode | master + worker on `spark://localhost:7077` |
+| 2 | Spark application written | `solution.py` |
+| 3 | Packaged into a **JAR** |  N/A for Python — see below |
+| 4 | Submitted via `spark-submit` | `spark-submit --master spark://localhost:7077` |
+| 5 | Expected output produced, job completed | 267 / 29 214 / 10 836, app `FINISHED` |
 
 ### Note on criterion #3 (JAR packaging)
 

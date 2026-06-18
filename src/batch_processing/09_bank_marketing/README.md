@@ -25,9 +25,9 @@ old row is "expired" and a new row is inserted.
 
 | SCD Type | Behaviour | History |
 |---|---|---|
-| Type 0 | Never update | ❌ |
-| **Type 1** | Overwrite old value | ❌ (current only) |
-| **Type 2** | **Expire old row + insert new** | ✅ full history |
+| Type 0 | Never update | No |
+| **Type 1** | Overwrite old value | current only |
+| **Type 2** | **Expire old row + insert new** | full history |
 | Type 3 | Add "previous" column | partial |
 
 Example — age 20, education changed from `high.school` → `basic.9y`:
@@ -131,13 +131,13 @@ uv run python src/batch_processing/09_bank_marketing/solution.py
 
 | # | Criterion | Status |
 | --- | --- | --- |
-| 1 | Read source CSV into Spark DataFrame | ✅ `spark.read.csv(sep=";")` |
-| 2 | Compare source with existing target records | ✅ `left_anti` + `inner` join on age |
-| 3 | Handle data conversions/validations | ✅ `inferSchema`, `dropDuplicates`, null-safe |
-| 4 | Test with sample data — only new/modified loaded | ✅ 35 new + 38 modified, 5 unchanged (untouched) |
-| — | SCD Type 2 with effective dates | ✅ `effective_start_date`, `effective_end_date`, `is_current` |
-| — | New records inserted with correct dates | ✅ start=today, end=9999-12-31, is_current=true |
-| — | Modified records: old expired, new inserted | ✅ old end=today+false, new start=today+true |
+| 1 | Read source CSV into Spark DataFrame | `spark.read.csv(sep=";")` |
+| 2 | Compare source with existing target records | `left_anti` + `inner` join on age |
+| 3 | Handle data conversions/validations | `inferSchema`, `dropDuplicates`, null-safe |
+| 4 | Test with sample data — only new/modified loaded | 35 new + 38 modified, 5 unchanged (untouched) |
+| — | SCD Type 2 with effective dates | `effective_start_date`, `effective_end_date`, `is_current` |
+| — | New records inserted with correct dates | start=today, end=9999-12-31, is_current=true |
+| — | Modified records: old expired, new inserted | old end=today+false, new start=today+true |
 
 ## Implementation notes
 

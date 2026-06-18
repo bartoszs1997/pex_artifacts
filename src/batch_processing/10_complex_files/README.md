@@ -106,9 +106,9 @@ uv run python src/batch_processing/10_complex_files/solution.py
 
 | # | Criterion | Status |
 | --- | --- | --- |
-| 1 | Data successfully extracted from PDF files | ✅ accuracy table + red text + captions |
-| 2 | Data successfully extracted from XML file | ✅ tree printed + `<company_description>` extracted |
-| 3 | Data successfully extracted from XLSX file | ✅ columns, row 50, age filter, CSV saved |
+| 1 | Data successfully extracted from PDF files | accuracy table + red text + captions |
+| 2 | Data successfully extracted from XML file | tree printed + `<company_description>` extracted |
+| 3 | Data successfully extracted from XLSX file | columns, row 50, age filter, CSV saved |
 
 ## Implementation notes
 
