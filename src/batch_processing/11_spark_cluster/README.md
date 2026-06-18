@@ -6,9 +6,28 @@ Run a Spark job on a Standalone cluster (Dockerized) and debug it via the Spark 
 
 ---
 
-## Quick Start (3 commands)
+## Prerequisites
+
+We use **Colima** (free, open-source Docker runtime) instead of Docker Desktop (license required).
 
 ```bash
+# Install (if not already installed)
+brew install docker docker-compose colima
+
+# Start Colima VM (only if not running)
+colima start
+```
+
+> **Note:** If `docker` / `colima` are not in PATH, run: `eval "$(/opt/homebrew/bin/brew shellenv)"`
+
+---
+
+## Quick Start
+
+```bash
+# 0. Go to the task directory
+cd src/batch_processing/
+
 # 1. Start the cluster (master + worker)
 docker compose up -d
 
