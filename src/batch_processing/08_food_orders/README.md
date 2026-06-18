@@ -134,13 +134,13 @@ In production at scale you would additionally consider:
 
 | # | Criterion | Status |
 | --- | --- | --- |
-| 1 | Dataset read into a Spark DataFrame | ✅ `spark.read.csv` with header + inferSchema |
-| 2 | Resulting DataFrame cached for faster access | ✅ `rated.cache()` before downstream queries |
-| 3 | All necessary transformations applied | ✅ filter, groupBy, agg, orderBy, limit, cast |
-| — | Filter out orders with no rating | ✅ `rating != "Not given"` → 1 162 rows |
-| — | Total cost per customer | ✅ 859 customers |
-| — | Restaurants sorted by total rating desc | ✅ Shake Shack #1 (569) |
-| — | Top 10 restaurants by total revenue | ✅ Shake Shack #1 ($2 225.20) |
+| 1 | Dataset read into a Spark DataFrame | `spark.read.csv` with header + inferSchema |
+| 2 | Resulting DataFrame cached for faster access | `rated.cache()` before downstream queries |
+| 3 | All necessary transformations applied | filter, groupBy, agg, orderBy, limit, cast |
+| — | Filter out orders with no rating | `rating != "Not given"` → 1 162 rows |
+| — | Total cost per customer | 859 customers |
+| — | Restaurants sorted by total rating desc | Shake Shack #1 (569) |
+| — | Top 10 restaurants by total revenue | Shake Shack #1 ($2 225.20) |
 
 ## Implementation notes
 

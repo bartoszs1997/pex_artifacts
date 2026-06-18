@@ -142,6 +142,6 @@ uv run python src/batch_processing/06_data_from_various_sources/solution.py --wi
 
 | # | Criterion | Status |
 | --- | --- | --- |
-| 1 | JSON parsed, relevant fields extracted into structured objects | ✅ 3 parsers → unified schema |
-| 2 | Parsed data accurate & complete (no missing values/errors) | ✅ verified vs pure-Python; `try_cast` keeps malformed ratings as explicit NULL |
-| 3 | Error handling for connection failures, file parsing errors, data inconsistencies | ✅ `FileNotFoundError` + `try_cast` + MySQL `try/except` |
+| 1 | JSON parsed, relevant fields extracted into structured objects | 3 parsers → unified schema |
+| 2 | Parsed data accurate & complete (no missing values/errors) | verified vs pure-Python; `try_cast` keeps malformed ratings as explicit NULL |
+| 3 | Error handling for connection failures, file parsing errors, data inconsistencies | `FileNotFoundError` + `try_cast` + MySQL `try/except` |

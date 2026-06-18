@@ -140,7 +140,7 @@ WARNING  Data quality: 634/152970 rows have a NULL 'number_of_episodes' ...
 
 | # | Criterion | Status |
 | --- | --- | --- |
-| 1 | Error-handling mechanisms catch and handle errors during execution | ✅ `try/except` in `read_data` + `main`; recovery fallback |
-| 2 | Error messages logged to a log file | ✅ `logs/error_handling.log` (WARNING+; ERROR/CRITICAL included) |
-| 3 | Run-time info captured (time, resources, data statistics) | ✅ execution time + `getrusage` + row/column/partition counts |
-| 4 | Simulated error is handled, logged, and alerted | ✅ `--simulate-error` → ERROR + `[ALERT]` + recovery |
+| 1 | Error-handling mechanisms catch and handle errors during execution | `try/except` in `read_data` + `main`; recovery fallback |
+| 2 | Error messages logged to a log file | `logs/error_handling.log` (WARNING+; ERROR/CRITICAL included) |
+| 3 | Run-time info captured (time, resources, data statistics) | execution time + `getrusage` + row/column/partition counts |
+| 4 | Simulated error is handled, logged, and alerted | `--simulate-error` → ERROR + `[ALERT]` + recovery |

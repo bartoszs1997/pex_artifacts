@@ -207,11 +207,11 @@ and re-raises on error, and always calls `spark.stop()`.
 
 | # | Criterion | Status |
 | --- | --- | --- |
-| 1 | Reads transaction data from the input CSV | ✅ `sc.textFile(Fraud.csv)` |
-| 2 | Filtered transactions grouped by account number | ✅ `reduceByKey` on `nameOrig` |
-| 3 | Writes account numbers + average amounts to output CSV | ✅ `data/output/flagged_accounts/part-*.csv` (`account,avg_amount`) |
-| — | Processed with the **RDD** API | ✅ `textFile`/`map`/`filter`/`reduceByKey`/`mapValues`/`reduce` |
-| — | Run in **cluster mode** | ✅ `spark-submit --master spark://127.0.0.1:7077`, separate executor |
+| 1 | Reads transaction data from the input CSV | `sc.textFile(Fraud.csv)` |
+| 2 | Filtered transactions grouped by account number | `reduceByKey` on `nameOrig` |
+| 3 | Writes account numbers + average amounts to output CSV | `data/output/flagged_accounts/part-*.csv` (`account,avg_amount`) |
+| — | Processed with the **RDD** API | `textFile`/`map`/`filter`/`reduceByKey`/`mapValues`/`reduce` |
+| — | Run in **cluster mode** | `spark-submit --master spark://127.0.0.1:7077`, separate executor |
 
 ## Implementation notes
 
