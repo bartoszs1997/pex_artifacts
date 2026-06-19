@@ -3,13 +3,12 @@
 ## Goal
 
 Demonstrate a **Type 2 Slowly Changing Dimension** in pure SQL on an RDBMS
-(PostgreSQL). The script keeps both the **current** and the **historical** state
-of a dimension: when a tracked attribute changes, the old row is expired and a
-new row is inserted, so nothing is ever overwritten.
+(PostgreSQL 15+). The script keeps both the **current** and the **historical**
+state of a dimension: when a tracked attribute changes, the old row is expired
+and a new row is inserted.
 
-This is a **dry-run / reference script** — read it top to bottom to follow the
-SCD2 logic. It is self-contained and idempotent (re-running it rebuilds
-everything from scratch).
+This is a **dry-run / reference script** — self-contained, idempotent, run top
+to bottom.
 
 ---
 
@@ -21,112 +20,85 @@ everything from scratch).
 | **Type 2** | **Expire old row + insert a new one** | **Full history** |
 | Type 3 | Keep previous value in an extra column | Partial (one step back) |
 
-Type 2 is the standard choice when you need to answer *"what did this record
-look like at a given point in time?"* — e.g. which membership tier a customer
-had when an order was placed.
-
 ---
 
 ## The dimension
 
-`dim_customer` — one row per **customer version**.
+`historical_shipping_data` — one row per **package version**.
 
 | Column | Role | Notes |
 |--------|------|-------|
-| `customer_sk` | **Surrogate key** | `BIGSERIAL` PK, unique per version |
-| `customer_id` | **Business key** | Stable; identifies the real customer |
-| `email`, `city`, `membership_tier` | **Tracked attributes** | A change here creates a new version |
-| `effective_start_date` | SCD2 metadata | When the version became valid |
+| `id` | Surrogate key | `BIGSERIAL` PK, unique per version |
+| `package_id` | **Business key** | Stable identifier of the package |
+| `status`, `shipping_dt`, `delivery_dt`, `source_address`, `destination_address` | **Tracked attributes** | A change in any of these creates a new version |
+| `effective_start_date` | SCD2 metadata | When this version became valid |
 | `effective_end_date` | SCD2 metadata | When it stopped being valid (`9999-12-31` = still current) |
-| `is_current` | SCD2 metadata | `1` = active version, `0` = expired |
+| `is_deleted` | SCD2 metadata | `0` = current version, `1` = expired |
 
 ---
 
-## What the script does
+## What the script does (3-step pattern)
 
-| Step | Section | Action |
-|------|---------|--------|
-| 1 | DDL | Create `dim_customer` |
-| 2 | seed | Initial load — 3 customers, each one current version |
-| 3 | staging | Load an incoming source snapshot into `stg_customer` |
-| 4 | **DML #1 — UPDATE** | **Expire** current rows whose tracked attributes changed |
-| 5 | **DML #2 — INSERT** | **Insert** new current versions (changed + brand-new) |
-| 6 | verify | `SELECT` the full history |
+| Step | What | How |
+|------|------|-----|
+| 1 | Filter out unchanged rows | `EXCEPT` between new data and historical data |
+| 2 | Expire old versions | `MERGE` — match on `package_id`, set `is_deleted = 1` and close `effective_end_date` |
+| 3 | Insert new current versions | `INSERT ... SELECT` all filtered rows with `is_deleted = 0` |
 
-Steps 4 and 5 are the heart of SCD2 (the **expire-then-insert** pattern) and
-are wrapped in a transaction so the change is applied atomically.
+Steps 2 and 3 are wrapped in `BEGIN / COMMIT` so they succeed or fail together
+(no expired row without its replacement, no orphaned insert without the expire).
 
-### The incoming batch (Step 3)
+### The incoming batch
 
-| Business key | Change vs current | SCD2 outcome |
+| Package | Change vs current | SCD2 outcome |
 |---|---|---|
-| `C001` | none | ignored (still current) |
-| `C002` | city `Krakow` → `Warsaw` | expire old + insert new version |
-| `C003` | email + tier changed | expire old + insert new version |
-| `C004` | did not exist | insert as first version |
-
-### The two-statement pattern
-
-1. **Expire (UPDATE).** Join staging to the *current* dimension row on the
-   business key and end-date every row where at least one tracked attribute
-   differs. Comparison uses MySQL's NULL-safe operator: `NOT (a <=> b)` means
-   "a differs from b", correctly handling `NULL`s.
-
-2. **Insert (INSERT … LEFT JOIN).** After the expire step, a business key has
-   **no current row** when it is either *brand new* or *just changed*. A single
-   `LEFT JOIN … WHERE current row IS NULL` therefore covers **both** cases,
-   while unchanged customers (which still have a current row) are skipped.
+| `PKG-001` | none | filtered out by EXCEPT (ignored) |
+| `PKG-002` | status + delivery_dt changed | expire old + insert new version |
+| `PKG-003` | destination changed | expire old + insert new version |
+| `PKG-004` | did not exist before | insert as first version |
 
 ---
 
 ## Expected result
 
 ```
-sk  id    email               city    tier    start       end         current
---  ----  ------------------  ------  ------  ----------  ----------  -------
-1   C001  alice@example.com   Warsaw  SILVER  2024-01-01  9999-12-31  1   untouched
-2   C002  bob@example.com     Krakow  GOLD    2024-01-01  2026-06-18  0   expired
-4   C002  bob@example.com     Warsaw  GOLD    2026-06-18  9999-12-31  1   new version
-3   C003  carol@example.com   Gdansk  SILVER  2024-01-01  2026-06-18  0   expired
-5   C003  carol@newmail.com   Gdansk  GOLD    2026-06-18  9999-12-31  1   new version
-6   C004  dave@example.com    Poznan  BRONZE  2026-06-18  9999-12-31  1   brand new
+id | package_id | status     | ship_dt    | deliv_dt   | src      | dst      | start      | end        | del
+---+------------+------------+------------+------------+----------+----------+------------+------------+----
+1  | PKG-001    | delivered  | 2025-01-10 | 2025-01-15 | Warsaw   | Krakow   | 2025-01-10 | 9999-12-31 | 0   untouched
+2  | PKG-002    | in_transit | 2025-02-01 | NULL       | Gdansk   | Poznan   | 2025-02-01 | 2026-06-19 | 1   expired
+5  | PKG-002    | delivered  | 2025-02-01 | 2025-02-08 | Gdansk   | Poznan   | 2026-06-19 | 9999-12-31 | 0   new version
+3  | PKG-003    | shipped    | 2025-03-05 | NULL       | Wroclaw  | Lublin   | 2025-03-05 | 2026-06-19 | 1   expired
+6  | PKG-003    | in_transit | 2025-03-05 | NULL       | Wroclaw  | Katowice | 2026-06-19 | 9999-12-31 | 0   new version
+4  | PKG-004    | shipped    | 2025-04-01 | NULL       | Szczecin | Olsztyn  | 2026-06-19 | 9999-12-31 | 0   brand new
 ```
 
-6 rows total: **4 current + 2 expired**. The history of `C002` and `C003` is
-preserved instead of being overwritten.
+6 rows: **4 current + 2 expired**. History of PKG-002 and PKG-003 preserved.
 
-A **point-in-time** query is what makes this worthwhile:
+Point-in-time query:
 
 ```sql
-SELECT * FROM dim_customer
-WHERE '2025-03-01' BETWEEN effective_start_date AND effective_end_date;
+SELECT * FROM historical_shipping_data
+WHERE '2025-02-15' BETWEEN effective_start_date AND effective_end_date;
 ```
-
-returns each customer as they were on that date.
 
 ---
 
 ## How to run
 
-This is a dry-run script; no data download or cluster is needed. Against any
-PostgreSQL instance:
-
 ```bash
 psql -U <user> -d <database> -f scd_type2.sql
 ```
 
-(or paste it into any SQL client). Re-running it is safe — it drops and
-recreates the tables each time.
+Re-running is safe (drops and recreates tables).
 
 ---
 
 ## Acceptance criteria coverage
 
-| NEBo step / criterion | Where |
+| NEBo requirement | Where in code |
 |---|---|
-| Determine a dimension, its keys, and attributes | Header comment + "The dimension" table |
-| Create SQL script for the table | Step 1 (DDL `CREATE TABLE dim_customer`) |
-| Choose a type of SCD to implement | Type 2 (expire + insert) |
-| Create SQL script with DML | Steps 4–5 (`UPDATE` + `INSERT`) |
-| SQL script contains DML that modifies the dimension table | `UPDATE` (expire) and `INSERT` (new versions) |
-| Dimension table modified according to the chosen SCD type | History preserved via `is_current` + effective dates |
+| Determine a dimension, its keys, and attributes | Header comment in SQL |
+| Create SQL script for the table (DDL) | `CREATE TABLE historical_shipping_data` |
+| Choose a type of SCD | Type 2 (expire + insert) |
+| Create SQL script with DML | Step 2 (`MERGE` expire) + Step 3 (`INSERT` new versions) |
+| Dimension table modified according to the chosen SCD type | History preserved via `is_deleted` + effective dates |
