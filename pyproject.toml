@@ -15,6 +15,7 @@ dependencies = [
     "openpyxl>=3.1.5",
     "lxml>=6.1.1",
     "pymupdf>=1.27.2.3",
+    "cinemagoer>=2023.5.1",
 ]
 
 [project.optional-dependencies]

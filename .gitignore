@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 *.so
+
+# Project plan (AI chat context, not for repo)
+plan.md
+
 .Python
 build/
 develop-eggs/
