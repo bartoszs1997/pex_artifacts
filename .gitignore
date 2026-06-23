@@ -96,6 +96,9 @@ temp/
 **/data/input/
 **/data/output/
 
+# Generated reports (zipfile task output)
+**/reports/
+
 # Spark specific
 metastore_db/
 derby.log
