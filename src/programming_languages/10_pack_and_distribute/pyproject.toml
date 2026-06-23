@@ -1,0 +1,24 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "salary-analyzer"
+version = "0.1.0"
+description = "A distributable PySpark package for salary data analysis."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [
+    { name = "Bartosz Sane" },
+]
+
+dependencies = [
+    "pyspark>=3.5.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "build>=1.0.0",
+]
