@@ -47,7 +47,6 @@ Source: [Kaggle](https://www.kaggle.com/datasets/inductiveanks/employee-salaries
 08_design_patterns/
 ├── download_data.py      # Kaggle download script
 ├── solution.py           # Main application (Strategy + Builder patterns)
-├── test_solution.py      # 19 unit tests
 ├── README.md
 └── data/
     ├── input/            # ds_salaries.csv
@@ -62,19 +61,4 @@ uv run python src/programming_languages/08_design_patterns/download_data.py
 
 # Run application
 uv run python src/programming_languages/08_design_patterns/solution.py
-
-# Run tests
-cd src/programming_languages/08_design_patterns
-uv run pytest test_solution.py -vv
 ```
-
-## Test Results
-
-```
-19 passed in 6.88s
-```
-
-Tests cover:
-- **Strategy pattern**: ABC enforcement, polymorphism, each concrete strategy
-- **Builder pattern**: fluent API, validation, defaults, dataclass structure
-- **ReportExecutor**: filtering logic, integration with strategies, extensibility

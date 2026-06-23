@@ -13,6 +13,7 @@ Usage:
 from __future__ import annotations
 
 import logging
+import sys
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -21,14 +22,32 @@ from pyspark.sql import DataFrame, SparkSession
 from pyspark.sql import functions as F
 
 # ---------------------------------------------------------------------------
-# Logging
+# Constants
 # ---------------------------------------------------------------------------
-logging.basicConfig(level=logging.INFO, format="%(levelname)s | %(message)s")
-log = logging.getLogger(__name__)
-
 SCRIPT_DIR = Path(__file__).resolve().parent
 INPUT_PATH = SCRIPT_DIR / "data" / "input" / "ds_salaries.csv"
 OUTPUT_DIR = SCRIPT_DIR / "data" / "output"
+LOG_DIR = SCRIPT_DIR / "logs"
+
+# ---------------------------------------------------------------------------
+# Logging (dual: console + file)
+# ---------------------------------------------------------------------------
+LOG_DIR.mkdir(parents=True, exist_ok=True)
+
+log = logging.getLogger(__name__)
+log.setLevel(logging.INFO)
+
+_formatter = logging.Formatter("%(asctime)s %(levelname)s %(name)s: %(message)s")
+
+_console_handler = logging.StreamHandler(sys.stdout)
+_console_handler.setLevel(logging.INFO)
+_console_handler.setFormatter(_formatter)
+log.addHandler(_console_handler)
+
+_file_handler = logging.FileHandler(LOG_DIR / "design_patterns.log", mode="a")
+_file_handler.setLevel(logging.INFO)
+_file_handler.setFormatter(_formatter)
+log.addHandler(_file_handler)
 
 
 # ===========================================================================
@@ -207,7 +226,7 @@ def main() -> None:
         .add_strategy(ByExperienceLevel())
         .add_strategy(ByCompanySize())
         .add_strategy(ByRemoteRatio())
-        .filter_by_year(2023)
+        .filter_by_year(2022)
         .filter_by_min_salary(50_000)
         .build()
     )
