@@ -6,6 +6,7 @@ __pycache__/
 
 # Project plan (AI chat context, not for repo)
 plan.md
+plan_queries.md
 
 .Python
 build/
