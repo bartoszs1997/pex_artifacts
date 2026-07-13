@@ -7,6 +7,7 @@ __pycache__/
 # Project plan (AI chat context, not for repo)
 plan.md
 plan_queries.md
+plan_data_lake.md
 
 .Python
 build/
@@ -96,6 +97,10 @@ temp/
 # Spark input/output data (generated, not source)
 **/data/input/
 **/data/output/
+
+# Data lake runtime artifacts (generated, not source)
+**/data/checkpoints/
+**/data/warehouse/
 
 # Generated reports (zipfile task output)
 **/reports/

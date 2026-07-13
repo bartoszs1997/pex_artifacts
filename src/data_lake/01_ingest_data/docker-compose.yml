@@ -1,0 +1,32 @@
+# Task 01 infrastructure: two services only.
+#
+#   localstack : imitates AWS S3 (the cloud data lake), S3 API on :4566
+#   postgres   : the source database for the streaming half
+#
+# No Kafka, no Debezium, no Hive. Spark runs on the host and connects here.
+#
+# Up:   docker compose -f src/data_lake/01_ingest_data/docker-compose.yml up -d
+# Down: docker compose -f src/data_lake/01_ingest_data/docker-compose.yml down -v
+
+name: pex-01-ingest
+
+services:
+  localstack:
+    image: localstack/localstack:3.8   # pinned: 'latest' is a Pro build (exit 55)
+    container_name: ingest-localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3
+      - ACTIVATE_PRO=0
+      - DEBUG=0
+
+  postgres:
+    image: postgres:16
+    container_name: ingest-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=pexsource
+      - POSTGRES_USER=pex
+      - POSTGRES_PASSWORD=pex
