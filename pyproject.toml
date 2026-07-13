@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Portfolio artifacts for Senior Big Data Software Engineer promotion"
 requires-python = ">=3.10"
 dependencies = [
-    "pyspark==4.1.2",
+    "pyspark==4.1.1",
     "pandas>=2.2.2",
     "kaggle>=1.6.0",
     "mysql-connector-python>=9.0.0",
@@ -17,6 +17,9 @@ dependencies = [
     "pymupdf>=1.27.2.3",
     "cinemagoer>=2023.5.1",
     "requests>=2.34.2",
+    "delta-spark==4.3.0",
+    "boto3>=1.43.41",
+    "psycopg2-binary>=2.9.12",
 ]
 
 [project.optional-dependencies]
