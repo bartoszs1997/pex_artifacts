@@ -1,0 +1,23 @@
+# Task 07 infrastructure: one service only.
+#
+#   localstack : imitates AWS S3 (the cloud data lake), S3 API on :4566
+#
+# The organized sales-data files and the catalog index (a Delta table) all live
+# in the lake (object storage). The catalog program (host Spark + boto3) writes
+# and searches them there.
+#
+# Up:   docker compose -f src/data_lake/07_data_catalog/docker-compose.yml up -d
+# Down: docker compose -f src/data_lake/07_data_catalog/docker-compose.yml down -v
+
+name: pex-07-catalog
+
+services:
+  localstack:
+    image: localstack/localstack:3.8   # pinned: 'latest' is a Pro build (exit 55)
+    container_name: catalog-localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3
+      - ACTIVATE_PRO=0
+      - DEBUG=0
