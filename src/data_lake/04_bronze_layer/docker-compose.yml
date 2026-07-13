@@ -1,0 +1,22 @@
+# Task 04 infrastructure: one service only.
+#
+#   localstack : imitates AWS S3 (the cloud data lake), S3 API on :4566
+#
+# The bronze Delta table lives in the lake (object storage). Raw CSV files land
+# on the local filesystem (the "source location"). Spark runs on the host.
+#
+# Up:   docker compose -f src/data_lake/04_bronze_layer/docker-compose.yml up -d
+# Down: docker compose -f src/data_lake/04_bronze_layer/docker-compose.yml down -v
+
+name: pex-04-bronze
+
+services:
+  localstack:
+    image: localstack/localstack:3.8   # pinned: 'latest' is a Pro build (exit 55)
+    container_name: bronze-localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3
+      - ACTIVATE_PRO=0
+      - DEBUG=0

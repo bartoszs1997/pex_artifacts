@@ -235,7 +235,7 @@ def verify_merged(spark: SparkSession) -> None:
 def main() -> None:
     create_bucket()
     spark = create_spark_session()
-    spark.sparkContext.setLogLevel("WARN")
+    spark.sparkContext.setLogLevel("ERROR")
 
     csv_df = read_source_csv(spark)
     source = build_source_sample(csv_df)
