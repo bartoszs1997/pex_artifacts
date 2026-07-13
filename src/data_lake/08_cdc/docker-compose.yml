@@ -1,0 +1,87 @@
+# Task 08 infrastructure: the full CDC stack the task wording requires.
+#
+#   mysql      : source system (classicmodels sample DB), binlog enabled for CDC
+#   zookeeper  : coordination for Kafka
+#   kafka      : messaging system that streams the CDC events
+#   connect    : Kafka Connect running the Debezium MySQL connector
+#   localstack : imitates AWS S3 (the data lake) where the Delta table lives
+#
+# Dual Kafka listeners: containers reach the broker at kafka:29092, the host
+# (where Spark runs) reaches it at localhost:9092.
+#
+# Up:   docker compose -f src/data_lake/08_cdc/docker-compose.yml up -d
+# Check: docker compose -f src/data_lake/08_cdc/docker-compose.yml ps
+# Down: docker compose -f src/data_lake/08_cdc/docker-compose.yml down -v
+
+name: pex-08-cdc
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: cdc-mysql
+    command:
+      - "--server-id=1"
+      - "--log-bin=mysql-bin"
+      - "--binlog-format=ROW"
+      - "--binlog-row-image=FULL"
+      - "--gtid-mode=ON"
+      - "--enforce-gtid-consistency=ON"
+      - "--default-authentication-plugin=mysql_native_password"
+    environment:
+      - MYSQL_ROOT_PASSWORD=debezium
+      - MYSQL_ROOT_HOST=%
+    ports:
+      - "3307:3306"   # host 3307 to avoid a local MySQL already on 3306
+    volumes:
+      - ./data/input:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-pdebezium"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  zookeeper:
+    image: quay.io/debezium/zookeeper:2.7
+    container_name: cdc-zookeeper
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: quay.io/debezium/kafka:2.7
+    container_name: cdc-kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      - ZOOKEEPER_CONNECT=zookeeper:2181
+      - BROKER_ID=1
+      - KAFKA_LISTENERS=INTERNAL://0.0.0.0:29092,EXTERNAL://0.0.0.0:9092
+      - KAFKA_ADVERTISED_LISTENERS=INTERNAL://kafka:29092,EXTERNAL://localhost:9092
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=INTERNAL
+
+  connect:
+    image: quay.io/debezium/connect:2.7
+    container_name: cdc-connect
+    depends_on:
+      - kafka
+      - mysql
+    ports:
+      - "8083:8083"
+    environment:
+      - BOOTSTRAP_SERVERS=kafka:29092
+      - GROUP_ID=1
+      - CONFIG_STORAGE_TOPIC=connect_configs
+      - OFFSET_STORAGE_TOPIC=connect_offsets
+      - STATUS_STORAGE_TOPIC=connect_statuses
+
+  localstack:
+    image: localstack/localstack:3.8   # pinned: 'latest' is a Pro build (exit 55)
+    container_name: cdc-localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3
+      - ACTIVATE_PRO=0
+      - DEBUG=0
