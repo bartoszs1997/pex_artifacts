@@ -101,6 +101,7 @@ temp/
 # Data lake runtime artifacts (generated, not source)
 **/data/checkpoints/
 **/data/warehouse/
+**/data/landing/
 
 # Generated reports (zipfile task output)
 **/reports/

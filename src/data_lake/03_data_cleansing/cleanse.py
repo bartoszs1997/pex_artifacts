@@ -183,7 +183,7 @@ def verify_silver(spark: SparkSession, low: float, high: float) -> None:
 def main() -> None:
     create_bucket()
     spark = create_spark_session()
-    spark.sparkContext.setLogLevel("WARN")
+    spark.sparkContext.setLogLevel("ERROR")
 
     # Bronze: raw data as ingested.
     load_bronze(spark)

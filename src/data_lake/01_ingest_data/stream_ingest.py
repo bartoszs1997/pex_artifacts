@@ -91,7 +91,7 @@ def main() -> None:
 
     create_bucket()
     spark = create_spark_session()
-    spark.sparkContext.setLogLevel("WARN")
+    spark.sparkContext.setLogLevel("ERROR")
 
     last_id = -1
     total = 0

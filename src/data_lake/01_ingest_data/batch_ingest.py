@@ -89,7 +89,7 @@ def write_bronze(df: DataFrame, target: str) -> None:
 def main() -> None:
     create_bucket()
     spark = create_spark_session()
-    spark.sparkContext.setLogLevel("WARN")
+    spark.sparkContext.setLogLevel("ERROR")
 
     # --- CSV -> bronze ---
     csv_df = read_csv(spark, INPUT / "housing.csv")
