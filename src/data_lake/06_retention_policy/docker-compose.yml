@@ -1,0 +1,22 @@
+# Task 06 infrastructure: one service only.
+#
+#   localstack : imitates AWS S3 (the cloud data lake), S3 API on :4566
+#
+# The active, archive Delta tables all live in the lake (object storage). The
+# retention engine (host Spark) enforces the policy against them.
+#
+# Up:   docker compose -f src/data_lake/06_retention_policy/docker-compose.yml up -d
+# Down: docker compose -f src/data_lake/06_retention_policy/docker-compose.yml down -v
+
+name: pex-06-retention
+
+services:
+  localstack:
+    image: localstack/localstack:3.8   # pinned: 'latest' is a Pro build (exit 55)
+    container_name: retention-localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3
+      - ACTIVATE_PRO=0
+      - DEBUG=0
