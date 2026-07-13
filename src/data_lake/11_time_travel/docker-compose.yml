@@ -1,0 +1,23 @@
+# Task 11 infrastructure: one service only.
+#
+#   localstack : imitates AWS S3 (the cloud data lake), S3 API on :4566
+#
+# The time-travelled customers Delta table (all its versions) lives in the lake
+# (object storage). The pipeline and the CLI (host Spark) operate on it there.
+#
+# Up:    docker compose -f src/data_lake/11_time_travel/docker-compose.yml up -d
+# Check: docker compose -f src/data_lake/11_time_travel/docker-compose.yml ps
+# Down:  docker compose -f src/data_lake/11_time_travel/docker-compose.yml down -v
+
+name: pex-11-timetravel
+
+services:
+  localstack:
+    image: localstack/localstack:3.8   # pinned: 'latest' is a Pro build (exit 55)
+    container_name: timetravel-localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3
+      - ACTIVATE_PRO=0
+      - DEBUG=0
