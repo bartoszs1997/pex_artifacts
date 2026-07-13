@@ -1,0 +1,23 @@
+# Task 03 infrastructure: one service only.
+#
+#   localstack : imitates AWS S3 (the cloud data lake), S3 API on :4566
+#
+# The task moves data from the bronze layer to the silver layer inside the data
+# lake, so the only thing we need is the lake itself (object storage). Spark runs
+# on the host and connects here.
+#
+# Up:   docker compose -f src/data_lake/03_data_cleansing/docker-compose.yml up -d
+# Down: docker compose -f src/data_lake/03_data_cleansing/docker-compose.yml down -v
+
+name: pex-03-cleansing
+
+services:
+  localstack:
+    image: localstack/localstack:3.8   # pinned: 'latest' is a Pro build (exit 55)
+    container_name: cleansing-localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3
+      - ACTIVATE_PRO=0
+      - DEBUG=0
