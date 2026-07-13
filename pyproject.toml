@@ -20,6 +20,7 @@ dependencies = [
     "delta-spark==4.3.0",
     "boto3>=1.43.41",
     "psycopg2-binary>=2.9.12",
+    "pymysql>=1.2.0",
 ]
 
 [project.optional-dependencies]
