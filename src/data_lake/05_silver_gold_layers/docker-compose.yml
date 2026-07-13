@@ -1,0 +1,22 @@
+# Task 05 infrastructure: one service only.
+#
+#   localstack : imitates AWS S3 (the cloud data lake), S3 API on :4566
+#
+# The silver and gold Delta tables live in the lake (object storage). Spark runs
+# on the host and connects here.
+#
+# Up:   docker compose -f src/data_lake/05_silver_gold_layers/docker-compose.yml up -d
+# Down: docker compose -f src/data_lake/05_silver_gold_layers/docker-compose.yml down -v
+
+name: pex-05-silver-gold
+
+services:
+  localstack:
+    image: localstack/localstack:3.8   # pinned: 'latest' is a Pro build (exit 55)
+    container_name: silver-gold-localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3
+      - ACTIVATE_PRO=0
+      - DEBUG=0
