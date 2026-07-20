@@ -21,6 +21,8 @@ dependencies = [
     "boto3>=1.43.41",
     "psycopg2-binary>=2.9.12",
     "pymysql>=1.2.0",
+    "kafka-python>=3.0.8",
+    "praw>=8.0.2",
 ]
 
 [project.optional-dependencies]
